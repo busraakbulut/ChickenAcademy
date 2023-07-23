@@ -11,4 +11,9 @@ public class PositionDebug : MonoBehaviour
 
         Debug.Log(transform.position);
     }
+
+    private void Update()
+    {
+        Debug.Log(transform.forward);
+    }
 }

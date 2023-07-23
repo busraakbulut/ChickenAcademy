@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
@@ -10,7 +11,8 @@ public enum WormState
     Idle, 
     Stretching, 
     Attacking, 
-    Taken, 
+    Taken,
+    Disappear,
 }
 
 public class Worm : MonoBehaviour
@@ -21,21 +23,36 @@ public class Worm : MonoBehaviour
 
     [SerializeField] private bool ready;
 
-    [SerializeField] private float collectingTime;
+    [SerializeField] private float disapperTime = 5f;
 
     private int level = 1;
 
     private float scorePoint = 5;
 
-    private WormState state;
+    [SerializeField] private WormState state;
 
-    private float destroyTime = 2f;
+    private float destroyTime = 0.25f;
+
+    [SerializeField] private float disapperTimer;
 
 
-    private void Awake()
+    private void OnEnable()
     {
+        disapperTimer = 0f;
+
         state = WormState.None;
+
         SetState(WormState.ComingOut);
+    }
+
+    private void Update()
+    {
+        disapperTimer += Time.deltaTime;
+
+        if (disapperTimer > disapperTime)
+        {
+            SetState(WormState.Disappear);
+        }
     }
 
     private void SetState( WormState newState)
@@ -48,6 +65,8 @@ public class Worm : MonoBehaviour
         switch (newState)
         {
             case WormState.ComingOut:
+                animator.SetTrigger("OnStart");
+
                 StartCoroutine(GetReady("Idle"));
                 break;
 
@@ -72,6 +91,10 @@ public class Worm : MonoBehaviour
                 StartCoroutine(Destroy());
                 break;
 
+            case WormState.Disappear:
+                animator.SetBool("HasDisappear", true);
+                break;
+
         }
 
         state = newState;
@@ -84,6 +107,12 @@ public class Worm : MonoBehaviour
         gameObject.SetActive(false);
 
         worm.gameObject.SetActive(true);
+
+        animator.SetBool("IsWormTaken", false);
+
+        animator.SetBool("HasWormAttack", false);
+
+        animator.SetBool("HasDisappear", false);
     }
 
     private IEnumerator GetReady(string animationName)
@@ -95,5 +124,30 @@ public class Worm : MonoBehaviour
 
         ready = true;
     }
+
+    //Animation Event: Triggered when worm dissepear animation is ended
+    public void OnDisappeared()
+    {
+        StartCoroutine(Destroy());
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Chickens"))
+        {
+            Vector3 direction = (other.transform.position - worm.position).normalized;
+
+            worm.forward = direction;
+
+            worm.Rotate(new Vector3(180, 0, 0));
+
+            disapperTimer = 0;
+
+            //Get Chicken Level
+            SetState(WormState.Attacking);
+
+        }
+    }
+
 
 }

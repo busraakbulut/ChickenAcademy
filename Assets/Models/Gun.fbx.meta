@@ -3,7 +3,12 @@ guid: 0e4f7c5ffda7a1a409f1da32537ce845
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_WeaponsPack01_hypercasual
+    second: {fileID: 2100000, guid: 6085f83bf83f35c4ab1bfcf012064616, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
