@@ -90,7 +90,27 @@ public class WormSpawner : MonoBehaviour
 
         gridObjectTransform.localPosition = SetPostionWithGridPosition(gridPosition);
 
+        gridObjects[gridPosition.x, gridPosition.y] = gridObjectTransform;
+
+        Worm worm = gridObjectTransform.GetComponent<Worm>();
+
+        worm.OnDestroy += Worm_OnDestroy;
+
         isSpawningRunning = false;
+    }
+
+    private void Worm_OnDestroy(object sender, EventArgs e)
+    {
+        Worm worm = sender as Worm;
+
+        if (worm != null)
+        {
+            Vector2Int gridPosition = GetGridPositionWithWorldPosition(worm.transform.position);
+
+            gridObjects[gridPosition.x, gridPosition.y] = null;
+
+            worm.OnDestroy -= Worm_OnDestroy;
+        }
     }
 
     private bool TryFindRandomEmptySlot(int xMax, int yMax, ref Vector2Int gridPosition, ref int attempt)
@@ -117,6 +137,13 @@ public class WormSpawner : MonoBehaviour
                            spawnArea.transform.position.z + gridPosition.y * gridHeight - spawnAreaHeight / 2);
     }
    
+    private Vector2Int GetGridPositionWithWorldPosition(Vector3 position)
+    {
+        int x = Convert.ToInt32((position.x - spawnArea.transform.position.x + spawnAreaWidth / 2) / gridWidth);
+        int y = Convert.ToInt32((position.z - spawnArea.transform.position.z + spawnAreaHeight / 2) / gridHeight);
+        return new Vector2Int(x,y);
+    }
+
     private void CreateTestDebugBojects()
     {
         for (int x = 0; x < coloumnCount; x++)

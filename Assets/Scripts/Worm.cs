@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -19,30 +20,39 @@ public class Worm : MonoBehaviour
 {
     [SerializeField] private Transform worm;
 
-    [SerializeField] private Animator animator;
+    [SerializeField] private WormAnimations wormAnimation;
 
     [SerializeField] private bool ready;
 
     [SerializeField] private float disapperTime = 5f;
 
+    [SerializeField] private float disapperTimer;
+    
+    [SerializeField] private WormState state;
+    
+    private float destroyTime = 0.25f;
+    
     private int level = 1;
 
     private float scorePoint = 5;
 
-    [SerializeField] private WormState state;
-
-    private float destroyTime = 0.25f;
-
-    [SerializeField] private float disapperTimer;
-
+    public event EventHandler OnDestroy;
 
     private void OnEnable()
     {
+        ready = false;
+
         disapperTimer = 0f;
 
         state = WormState.None;
 
         SetState(WormState.ComingOut);
+
+        wormAnimation.OnGettingReady += Animation_OnGettingReady;
+
+        wormAnimation.OnHit += Animation_OnHit;
+
+        wormAnimation.OnDisapear += Animation_OnDisapear;
     }
 
     private void Update()
@@ -55,6 +65,21 @@ public class Worm : MonoBehaviour
         }
     }
 
+    private void Animation_OnDisapear(object sender, EventArgs e)
+    {
+        StartCoroutine(Destroy());
+    }
+
+    private void Animation_OnHit(object sender, EventArgs e)
+    {
+        Debug.Log("Attack");
+    }
+
+    private void Animation_OnGettingReady(object sender, EventArgs e)
+    {
+        ready = true;
+    }
+
     private void SetState( WormState newState)
     {
         if (state == newState)
@@ -65,34 +90,27 @@ public class Worm : MonoBehaviour
         switch (newState)
         {
             case WormState.ComingOut:
-                animator.SetTrigger("OnStart");
-
-                StartCoroutine(GetReady("Idle"));
+                wormAnimation.PlayComingOut();
                 break;
 
             case WormState.Idle:
-                animator.SetBool("IsWormTaken", false);
-                animator.SetBool("HasWormAttack", false);
-
-                StartCoroutine(GetReady("Idle"));
+                wormAnimation.PlayIdle();
                 break;
 
             case WormState.Stretching:
-                animator.SetBool("IsWormTaken", true);
+                wormAnimation.PlayStretch();
                 break;
 
             case WormState.Attacking:
-                animator.SetBool("HasWormAttack", true);
+                wormAnimation.PlayAttack();
                 break;
 
             case WormState.Taken:
-                worm.gameObject.SetActive(false);
-
                 StartCoroutine(Destroy());
                 break;
 
             case WormState.Disappear:
-                animator.SetBool("HasDisappear", true);
+                wormAnimation.PlayDiseppear();
                 break;
 
         }
@@ -102,40 +120,30 @@ public class Worm : MonoBehaviour
 
     private IEnumerator Destroy()
     {
-        yield return new WaitForSeconds(destroyTime);
+        worm.gameObject.SetActive(false);
 
-        gameObject.SetActive(false);
+        yield return new WaitForSeconds(destroyTime);
 
         worm.gameObject.SetActive(true);
 
-        animator.SetBool("IsWormTaken", false);
+        gameObject.SetActive(false);
 
-        animator.SetBool("HasWormAttack", false);
+        wormAnimation.ResetAnimation();
 
-        animator.SetBool("HasDisappear", false);
-    }
-
-    private IEnumerator GetReady(string animationName)
-    {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
-        {
-            yield return null;
-        }
-
-        ready = true;
-    }
-
-    //Animation Event: Triggered when worm dissepear animation is ended
-    public void OnDisappeared()
-    {
-        StartCoroutine(Destroy());
+        OnDestroy?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Chickens"))
         {
-            Vector3 direction = (other.transform.position - worm.position).normalized;
+            Vector3 startPosition = new Vector3(worm.transform.position.x, 0, worm.transform.position.z);
+
+            Vector3 endPosition = new Vector3(other.transform.position.x, 0, other.transform.position.z);
+
+            Vector3 direction = (endPosition - startPosition).normalized;
+
+            //Vector3 direction = (other.transform.position - worm.position).normalized;
 
             worm.forward = direction;
 
