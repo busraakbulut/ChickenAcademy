@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Chicken : MonoBehaviour
+{
+    [SerializeField] private ChickenAnimations chickenAnimations;
+
+    [SerializeField] private GameObject worm;
+
+    public void Eat()
+    {
+        chickenAnimations.PlayEat();
+
+        worm.SetActive(true);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Worms"))
+        {
+            Vector3 startPosition = new Vector3(transform.position.x,0,transform.position.z);
+            
+            Vector3 endPosition = new Vector3(collision.gameObject.transform.position.x,0,collision.gameObject.transform.position.z);
+
+            transform.forward = (endPosition - startPosition).normalized;
+
+            Debug.DrawRay(transform.position + new Vector3(0,5,0), transform.forward*10, Color.red,5);
+
+        }
+    }
+}

@@ -8,6 +8,7 @@ public class WormAnimations : MonoBehaviour
     public event EventHandler OnDisapear;
     public event EventHandler OnHit;
     public event EventHandler OnGettingReady;
+    public event EventHandler OnWormTaken;
 
     private void OnEnable()
     {
@@ -30,6 +31,12 @@ public class WormAnimations : MonoBehaviour
     private void OnGettingReadyAnim()
     {
         OnGettingReady?.Invoke(this, EventArgs.Empty);
+    }
+
+    // Animation Event: trigs when worm taken
+    private void OnWormTakenAnim()
+    {
+        OnWormTaken?.Invoke(this, EventArgs.Empty);
     }
 
     public void PlayComingOut()

@@ -20,6 +20,8 @@ public class Worm : MonoBehaviour
 {
     [SerializeField] private Transform worm;
 
+    [SerializeField] private GameObject wormModel;
+
     [SerializeField] private WormAnimations wormAnimation;
 
     [SerializeField] private bool ready;
@@ -30,13 +32,15 @@ public class Worm : MonoBehaviour
     
     [SerializeField] private WormState state;
     
-    private float destroyTime = 0.25f;
+    private float destroyTime = 2f;
     
     private int level = 1;
 
     private float scorePoint = 5;
 
     public event EventHandler OnDestroy;
+
+    private GameObject chicken;
 
     private void OnEnable()
     {
@@ -53,6 +57,8 @@ public class Worm : MonoBehaviour
         wormAnimation.OnHit += Animation_OnHit;
 
         wormAnimation.OnDisapear += Animation_OnDisapear;
+
+        wormAnimation.OnWormTaken += WormAnimation_OnWormTaken;
     }
 
     private void Update()
@@ -65,6 +71,11 @@ public class Worm : MonoBehaviour
         }
     }
 
+    private void WormAnimation_OnWormTaken(object sender, EventArgs e)
+    {
+        StartCoroutine(Destroy());
+    }
+
     private void Animation_OnDisapear(object sender, EventArgs e)
     {
         StartCoroutine(Destroy());
@@ -72,7 +83,10 @@ public class Worm : MonoBehaviour
 
     private void Animation_OnHit(object sender, EventArgs e)
     {
-        Debug.Log("Attack");
+        if (chicken != null && ready)
+        {
+          Debug.Log("Attack");
+        }
     }
 
     private void Animation_OnGettingReady(object sender, EventArgs e)
@@ -106,7 +120,7 @@ public class Worm : MonoBehaviour
                 break;
 
             case WormState.Taken:
-                StartCoroutine(Destroy());
+                wormAnimation.PlayStretch();
                 break;
 
             case WormState.Disappear:
@@ -120,7 +134,7 @@ public class Worm : MonoBehaviour
 
     private IEnumerator Destroy()
     {
-        worm.gameObject.SetActive(false);
+        wormModel.SetActive(false);
 
         yield return new WaitForSeconds(destroyTime);
 
@@ -151,9 +165,20 @@ public class Worm : MonoBehaviour
 
             disapperTimer = 0;
 
-            //Get Chicken Level
-            SetState(WormState.Attacking);
+            chicken = other.gameObject;
 
+            chicken.GetComponent<Chicken>().Eat();
+            //Get Chicken Level
+            //SetState(WormState.Attacking);
+            SetState(WormState.Taken);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Chickens"))
+        {
+            chicken = null;
         }
     }
 

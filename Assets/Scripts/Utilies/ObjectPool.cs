@@ -10,18 +10,24 @@ public class ObjectPool
 
     private GameObject pooledObject;
 
+    private GameObject parent;
+
     private List<GameObject> pool;
 
-    public ObjectPool(int objectCount, GameObject pooledObject)
+    public ObjectPool(int objectCount, GameObject pooledObject, Transform parentTransform = null)
     {
         this.objectCount = objectCount;
         this.pooledObject = pooledObject;
 
         pool = new List<GameObject>();
 
+        parent = new GameObject(pooledObject.name + "Pool");
+
+        parent.transform.parent = parentTransform;
+
         for (int i = 0; i < objectCount; i++)
         {
-            GameObject go = GameObject.Instantiate(pooledObject);
+            GameObject go = GameObject.Instantiate(pooledObject, parent.transform);
 
             go.SetActive(false);
 

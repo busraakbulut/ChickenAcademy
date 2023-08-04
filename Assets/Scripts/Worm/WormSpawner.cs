@@ -48,7 +48,7 @@ public class WormSpawner : MonoBehaviour
 
         gridObjects = new Transform[coloumnCount, rowCount];
 
-        objectPool = new(maxSpawnCount, wormPrefab.gameObject);
+        objectPool = new(maxSpawnCount, wormPrefab.gameObject, transform);
     }
 
 

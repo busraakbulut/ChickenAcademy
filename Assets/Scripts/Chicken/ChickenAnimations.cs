@@ -14,16 +14,20 @@ public class ChickenAnimations : MonoBehaviour
 
     public void PlayDeath()
     {
-        animator.SetTrigger("OnDeath");
+        animator.SetBool("Death", true);
     }
 
     public void PlayAttack()
     {
-        animator.SetTrigger("OnAttack");
+        animator.SetBool("Attack", true);
+
+        animator.SetBool("Eat", false);
     }
 
     public void PlayEat()
     {
-        animator.SetTrigger("OnEat");
+        animator.SetBool("Eat", true);
+
+        animator.SetBool("Attack", false);
     }
 }

@@ -46,8 +46,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2, y: 0.5, z: 2}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!114 &8867083109967626223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,9 +61,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worm: {fileID: 6075347335033373666}
+  wormModel: {fileID: 4965509462644034724}
   wormAnimation: {fileID: 8721251198746568849}
   ready: 0
-  disapperTime: 10
+  disapperTime: 25
   disapperTimer: 0
   state: 0
 --- !u!1 &3764878334967808538
@@ -618,6 +619,11 @@ MonoBehaviour:
 --- !u!4 &2954129790672311164 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6a5782bc389c54b48a85db053a2259dd, type: 3}
+  m_PrefabInstance: {fileID: 3419802331042116759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4965509462644034724 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1469127211873437645, guid: 6a5782bc389c54b48a85db053a2259dd, type: 3}
   m_PrefabInstance: {fileID: 3419802331042116759}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6075347335033373666 stripped
