@@ -15,6 +15,8 @@ public class Incubation : MonoBehaviour
 
     [SerializeField] private ObjectPool chickenPool;
 
+    private Animator eggAnim;
+
     private AllyUnit members;
 
     private float hatchTimer;
@@ -23,9 +25,21 @@ public class Incubation : MonoBehaviour
 
     private void Awake()
     {
+        eggAnim = egg.GetComponent<Animator>();
+
+        egg.GetComponent<Egg>().OnCrackedAnimComplated += Egg_OnCrackedAnimComplated;
+
         DisableEgg();
     }
 
+    private void Egg_OnCrackedAnimComplated()
+    {
+        DisableEgg();
+
+        chickenPool.TakeObject().transform.position = transform.position;
+
+        members.ActualMember++;
+    }
 
     public void TakeEgg()
     {
@@ -57,11 +71,7 @@ public class Incubation : MonoBehaviour
 
         UpdateCountDownText();
 
-        DisableEgg();
-
-        chickenPool.TakeObject().transform.position = transform.position;
-
-        members.ActualMember++;
+        eggAnim.SetTrigger("OnCracked");
     }
 
     private void UpdateCountDownText()
@@ -100,4 +110,6 @@ public class Incubation : MonoBehaviour
 
         chickenPool = new ObjectPool(members.MaxMember, chicken, transform);
     }
+
+    public int GetMaxUnitNumber() => members.MaxMember;
 }

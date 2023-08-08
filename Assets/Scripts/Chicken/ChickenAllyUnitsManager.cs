@@ -44,9 +44,9 @@ public class ChickenAllyUnitsManager : MonoBehaviour
         soliderInbation.SetUnit(soliderUnit);
 
         //Test
-        workerIncubation.TakeEgg();
+        //workerIncubation.TakeEgg();
 
-        soliderInbation.TakeEgg();
+        //soliderInbation.TakeEgg();
     }
 
 

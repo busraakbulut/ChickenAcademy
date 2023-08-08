@@ -7,6 +7,7 @@ TagManager:
   - Farmers
   - Chickens
   - Worms
+  - DropArea
   layers:
   - Default
   - TransparentFX
