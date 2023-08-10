@@ -22,6 +22,8 @@ public class ChickenAnimations : MonoBehaviour
         animator.SetBool("Attack", true);
 
         animator.SetBool("Eat", false);
+
+        animator.SetBool("Walk", false);
     }
 
     public void PlayEat()
@@ -29,5 +31,25 @@ public class ChickenAnimations : MonoBehaviour
         animator.SetBool("Eat", true);
 
         animator.SetBool("Attack", false);
+
+        animator.SetBool("Walk", false);
+    }
+
+    public void PlayWalk()
+    {
+        animator.SetBool("Eat", false);
+
+        animator.SetBool("Attack", false);
+
+        animator.SetBool("Walk", true);
+    }
+
+    public void PlayIdle()
+    {
+        animator.SetBool("Eat", false);
+
+        animator.SetBool("Attack", false);
+
+        animator.SetBool("Walk", false);
     }
 }

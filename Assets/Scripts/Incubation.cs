@@ -2,49 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Incubation : MonoBehaviour
 {
+    public event Action OnHatched;
+
     [SerializeField] private TextMeshProUGUI hatchCountDownText;
 
     [SerializeField] private GameObject egg;
 
-    [SerializeField] private GameObject chicken;
-
     [SerializeField] private float hatchTime;
 
-    [SerializeField] private ObjectPool chickenPool;
-
-    private Animator eggAnim;
+    [SerializeField] private Animator eggAnim;
 
     private AllyUnit members;
 
-    private float hatchTimer;
+    private SoliderSpawnPoints spawnPoints;
 
-    private bool hasEgg;
+    private float hatchTimer;
+    public bool HasEgg { get; private set; }
 
     private void Awake()
     {
-        eggAnim = egg.GetComponent<Animator>();
-
         egg.GetComponent<Egg>().OnCrackedAnimComplated += Egg_OnCrackedAnimComplated;
 
         DisableEgg();
+
+        HasEgg = false;
     }
 
     private void Egg_OnCrackedAnimComplated()
     {
-        DisableEgg();
+        OnHatched?.Invoke();
 
-        chickenPool.TakeObject().transform.position = transform.position;
-
-        members.ActualMember++;
+        StartCoroutine(DisableEggAnimation());
     }
 
     public void TakeEgg()
     {
         // Already has an egg
-        if (hasEgg)
+        if (HasEgg)
         {
             return;
         }
@@ -71,7 +69,7 @@ public class Incubation : MonoBehaviour
 
         UpdateCountDownText();
 
-        eggAnim.SetTrigger("OnCracked");
+        eggAnim.SetBool("Crack",true);
     }
 
     private void UpdateCountDownText()
@@ -81,11 +79,13 @@ public class Incubation : MonoBehaviour
 
     private void EnableEgg()
     {
-        hatchTimer = 0;
-
-        hasEgg = true;
-
         egg.SetActive(true);
+        
+        eggAnim.SetBool("Crack", false);
+
+        HasEgg = true;
+
+        hatchTimer = 0;
 
         hatchCountDownText.gameObject.SetActive(true);
 
@@ -94,22 +94,39 @@ public class Incubation : MonoBehaviour
         StartCoroutine(Hatch());
     }
 
-    private void DisableEgg()
+    private void DisableEgg()   
     {
-        hasEgg = false;
+        if (egg.gameObject.activeSelf)
+        {
+            eggAnim.SetBool("Crack", false);
 
-        egg.SetActive(false);
+            egg.SetActive(false);
+        }
 
         hatchCountDownText.gameObject.SetActive(false);
     }
 
+    private IEnumerator DisableEggAnimation()
+    {
+        DisableEgg();
+        
+        yield return new WaitForSeconds(5);
+
+        HasEgg = false;
+    }
 
     public void SetUnit(AllyUnit members)
     {
         this.members = members;
 
-        chickenPool = new ObjectPool(members.MaxMember, chicken, transform);
+        spawnPoints = GetComponent<SoliderSpawnPoints>();
+
+        if(spawnPoints != null )
+        {
+            spawnPoints.Init(members.MaxMember);
+        }
     }
 
-    public int GetMaxUnitNumber() => members.MaxMember;
+
+
 }

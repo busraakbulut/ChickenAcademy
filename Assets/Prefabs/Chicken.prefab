@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 5747537340259918977}
   - component: {fileID: 5208944854000111479}
   - component: {fileID: 5208944854000111480}
-  - component: {fileID: 6797107546524430644}
+  - component: {fileID: 4125572189384103086}
+  - component: {fileID: 1049131803806975737}
+  - component: {fileID: 5194138766303043975}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Chickens
@@ -64,7 +66,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1.5}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &6797107546524430644
+--- !u!114 &4125572189384103086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,10 +75,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 4938349199714172475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9302d92d15cfc8d4793cb6184f4ec4ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 922ce5de33a0e3f488c2996b9d2e51d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  workerAI: {fileID: 5194138766303043975}
+  soliderAI: {fileID: 1049131803806975737}
+--- !u!114 &1049131803806975737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4938349199714172475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22266953b987a4c4494597ca95650e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chickenAnimations: {fileID: 7041005022851120943}
+  moveSpeed: 2
+--- !u!114 &5194138766303043975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4938349199714172475}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09ba64038bd2ca49a033525e79de273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chickenAnimations: {fileID: 7041005022851120943}
+  moveSpeed: 5
   worm: {fileID: 4601139978548140009}
 --- !u!1 &8626034790915453800
 GameObject:

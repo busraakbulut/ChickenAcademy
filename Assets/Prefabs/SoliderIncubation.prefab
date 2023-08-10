@@ -508,8 +508,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hatchCountDownText: {fileID: 1721884829725586002}
   egg: {fileID: 299101720633876954}
-  chicken: {fileID: 4938349199714172475, guid: 4b3d6a8b60a65ad4f8f254ccbe559a51, type: 3}
   hatchTime: 60
+  eggAnim: {fileID: 2216185937197080750}
 --- !u!114 &4952954553188407625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,6 +522,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b34a8f864c131a41a927b53d1787785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnAreaPrefab: {fileID: 6997743699461093606, guid: 70ee6e4882d71f74786cf5a0a7eafcdd, type: 3}
+  gapBetween2SpwanArea: 5
+  zOffset: 5
 --- !u!1001 &1764521524397340987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -715,6 +718,11 @@ GameObject:
 --- !u!4 &1111632380770614112 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7009424445139761695, guid: 4fe9b567615f33240bab0b65856d10b0, type: 3}
+  m_PrefabInstance: {fileID: 7938497761909522815}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2216185937197080750 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8136400312249410001, guid: 4fe9b567615f33240bab0b65856d10b0, type: 3}
   m_PrefabInstance: {fileID: 7938497761909522815}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8153706441135199560

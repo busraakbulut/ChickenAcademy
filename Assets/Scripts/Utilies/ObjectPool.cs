@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class ObjectPool
 {
+
+    public event Action OnObjectInPoolChanged;
+
     private int objectCount;
 
     private GameObject pooledObject;
@@ -50,6 +53,8 @@ public class ObjectPool
 
         go.SetActive(true);
 
+        OnObjectInPoolChanged?.Invoke();
+
         return go;
     }
 
@@ -60,6 +65,8 @@ public class ObjectPool
             if (obj == go)
             {
                 go.SetActive(false);
+
+                OnObjectInPoolChanged?.Invoke();
             }
         }
     }
@@ -76,4 +83,7 @@ public class ObjectPool
         }
         return count;
     }
+
+    public GameObject[] GetAll() => pool.ToArray();
+
 }

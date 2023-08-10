@@ -167,7 +167,7 @@ public class Worm : MonoBehaviour
 
             chicken = other.gameObject;
 
-            chicken.GetComponent<Chicken>().Eat();
+            chicken.GetComponent<WorkerChickenAI>().Eat();
             //Get Chicken Level
             //SetState(WormState.Attacking);
             SetState(WormState.Taken);

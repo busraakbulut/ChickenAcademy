@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class WormSpawner : MonoBehaviour
 {
+    public event Action<ObjectPool> OnWormsSpawnerReady;
+
     [SerializeField] private Transform spawnArea;
 
     [SerializeField] private float spawnOffsetToEdges;
@@ -49,6 +51,8 @@ public class WormSpawner : MonoBehaviour
         gridObjects = new Transform[coloumnCount, rowCount];
 
         objectPool = new(maxSpawnCount, wormPrefab.gameObject, transform);
+
+        OnWormsSpawnerReady?.Invoke(objectPool);
     }
 
 

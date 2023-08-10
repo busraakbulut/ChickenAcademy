@@ -6,6 +6,7 @@ using UnityEngine;
 public class Egg : MonoBehaviour
 {
     public event Action OnCrackedAnimComplated;
+
     public void OnCrackAnimComplatedAnimEvent()
     {
         OnCrackedAnimComplated?.Invoke();

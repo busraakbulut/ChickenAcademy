@@ -332,8 +332,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hatchCountDownText: {fileID: 8642955788724179001}
   egg: {fileID: 2783058492446929376}
-  chicken: {fileID: 4938349199714172475, guid: 4b3d6a8b60a65ad4f8f254ccbe559a51, type: 3}
-  hatchTime: 90
+  hatchTime: 10
+  eggAnim: {fileID: 0}
 --- !u!1 &7747040214630130666
 GameObject:
   m_ObjectHideFlags: 0
